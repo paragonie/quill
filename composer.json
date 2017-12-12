@@ -1,0 +1,37 @@
+{
+  "name": "paragonie/quill",
+  "description": "Library for quickly and easily writing data to a Chronicle instance",
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Paragon Initiative Enterprises",
+      "email": "security@paragonie.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "guzzlehttp/guzzle": "^6",
+    "paragonie/constant_time_encoding": "^2",
+    "paragonie/sapient": "^1",
+    "paragonie/sodium_compat": "^1.4"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "ParagonIE\\Quill\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6",
+    "vimeo/psalm": "^0|^1"
+  },
+  "scripts": {
+    "static-analysis": "psalm",
+    "test": "phpunit"
+  }
+}
