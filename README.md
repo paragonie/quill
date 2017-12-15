@@ -42,6 +42,8 @@ $quill = (new Quill())
 $quill->write("Important security notice goes here.");
 ```
 
+### Writing Data (Unencrypted)
+
 There are two main API methods that do the same thing but differ in their return
 values:
 
@@ -49,3 +51,22 @@ values:
   * Returns the PSR-7 Response object, or throws an exception
 * `blindWrite(string $input): bool`
   * Returns `TRUE` or `FALSE`
+
+### Writing Data (Symmetric Encryption)
+
+If you want to encrypt your messages using a [shared encryption key](https://github.com/paragonie/sapient/blob/master/docs/Internals/CryptographyKey.md):
+
+* `writeEncrypted(string $input, SharedEncryptionKey $key): ResponseInterface`
+  * Returns the PSR-7 Response object, or throws an exception
+* `blindWriteEncrypted(string $input, SharedEncryptionKey $key): bool`
+  * Returns `TRUE` or `FALSE`
+
+### Writing Data (Asymmetric Encryption)
+  
+If you want to encrypt your messages using a [public-key cryptography](https://github.com/paragonie/sapient/blob/master/docs/Internals/CryptographyKey.md):
+
+* `writeSealed(string $input, SealingPublicKey $key): ResponseInterface`
+  * Returns the PSR-7 Response object, or throws an exception
+* `blindWriteSealed(string $input, SealingPublicKey $key): bool`
+  * Returns `TRUE` or `FALSE`
+
