@@ -3,18 +3,20 @@ declare(strict_types=1);
 namespace ParagonIE\Quill;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\{
+    Request,
+    Response
+};
 use ParagonIE\Sapient\Adapter\Guzzle;
 use ParagonIE\Sapient\CryptographyKeys\{
-    SigningPublicKey,
-    SigningSecretKey
+    SealingPublicKey, SharedEncryptionKey, SigningPublicKey, SigningSecretKey
 };
 use ParagonIE\Sapient\Exception\{
     HeaderMissingException,
     InvalidMessageException
 };
 use ParagonIE\Sapient\Sapient;
+use ParagonIE\Sapient\Simple;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -85,42 +87,6 @@ class Quill
     }
 
     /**
-     * Write data to the Chronicle instance. Return the Response object.
-     *
-     * @param string $data
-     * @return ResponseInterface
-     *
-     * @throws HeaderMissingException
-     * @throws InvalidMessageException
-     * @throws \Error
-     */
-    public function write(string $data): ResponseInterface
-    {
-        $this->assertValid();
-        $sapient = new Sapient(new Guzzle($this->http));
-
-        /** @var Request $request */
-        $request = $sapient->createSignedRequest(
-            'POST',
-            $this->chronicleUrl,
-            $data,
-            $this->clientSSK,
-            [
-                static::CLIENT_ID_HEADER => $this->clientID
-            ]
-        );
-        /** @var Response $response */
-        $response = $this->http->send($request);
-
-        /** @var Response $verified */
-        $verified = $sapient->verifySignedResponse(
-            $response,
-            $this->serverSPK
-        );
-        return $this->validateResponse($verified);
-    }
-
-    /**
      * Write data to the Chronicle Instance. Return a boolean indicating
      * success or failure, discarding the response body after verification.
      *
@@ -137,6 +103,84 @@ class Quill
         } catch (InvalidMessageException | HeaderMissingException $ex) {
             return false;
         }
+    }
+
+    /**
+     * Encrypt data with a shared (symmetric) encryption key, then write it
+     * to a Chronicle. Returns TRUE if published successfully.
+     *
+     * @param string $data
+     * @param SharedEncryptionKey $sharedEncryptionKey
+     * @return bool
+     * @throws \Error
+     */
+    public function blindWriteEncrypted(
+        string $data,
+        SharedEncryptionKey $sharedEncryptionKey
+    ): bool
+    {
+        try {
+            $response = $this->writeEncrypted($data, $sharedEncryptionKey);
+            // If we're here, the data was written successfully.
+            return $response instanceof ResponseInterface;
+        } catch (InvalidMessageException | HeaderMissingException $ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Encrypt data with an public key (asymmetric encryption), then write it
+     * to a Chronicle. Returns TRUE if published successfully.
+     *
+     * @param string $data
+     * @param SealingPublicKey $publicKey
+     * @return bool
+     * @throws \Error
+     */
+    public function blindWriteSealed(
+        string $data,
+        SealingPublicKey $publicKey
+    ): bool
+    {
+        try {
+            $response = $this->writeSealed($data, $publicKey);
+            // If we're here, the data was written successfully.
+            return $response instanceof ResponseInterface;
+        } catch (InvalidMessageException | HeaderMissingException $ex) {
+            return false;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getChronicleURL(): string
+    {
+        return $this->chronicleUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientID(): string
+    {
+        return $this->clientID;
+    }
+
+    /**
+     * @return SigningSecretKey
+     */
+    public function getClientSecretKey(): SigningSecretKey
+    {
+        return $this->clientSSK;
+    }
+
+    /**
+     * @return SigningPublicKey
+     */
+    public function getServerPublicKey(): SigningPublicKey
+    {
+        return $this->serverSPK;
     }
 
     /**
@@ -180,6 +224,82 @@ class Quill
     }
 
     /**
+     * Encrypt a message and publish its contents onto a Chronicle instance,
+     * using a shared encryption key. (Symmetric cryptography.)
+     *
+     * @param string $data
+     * @param SharedEncryptionKey $sharedEncryptionKey
+     * @return ResponseInterface
+     * @throws HeaderMissingException
+     * @throws InvalidMessageException
+     * @throws \Error
+     */
+    public function writeEncrypted(
+        string $data,
+        SharedEncryptionKey $sharedEncryptionKey
+    ): ResponseInterface {
+        return $this->write(
+            Simple::encrypt($data, $sharedEncryptionKey)
+        );
+    }
+
+    /**
+     * Encrypt a message and publish its contents onto a Chronicle instance,
+     * using a public encryption key. (Asymmetric cryptography.)
+     *
+     * @param string $data
+     * @param SealingPublicKey $publicKey
+     * @return ResponseInterface
+     * @throws HeaderMissingException
+     * @throws InvalidMessageException
+     * @throws \Error
+     */
+    public function writeSealed(
+        string $data,
+        SealingPublicKey $publicKey
+    ): ResponseInterface {
+        return $this->write(
+            Simple::seal($data, $publicKey)
+        );
+    }
+
+    /**
+     * Write data to the Chronicle instance. Return the Response object.
+     *
+     * @param string $data
+     * @return ResponseInterface
+     *
+     * @throws HeaderMissingException
+     * @throws InvalidMessageException
+     * @throws \Error
+     */
+    public function write(string $data): ResponseInterface
+    {
+        $this->assertValid();
+        $sapient = new Sapient(new Guzzle($this->http));
+
+        /** @var Request $request */
+        $request = $sapient->createSignedRequest(
+            'POST',
+            $this->chronicleUrl,
+            $data,
+            $this->clientSSK,
+            [
+                static::CLIENT_ID_HEADER => $this->clientID
+            ]
+        );
+        /** @var Response $response */
+        $response = $this->http->send($request);
+
+        /** @var Response $verified */
+        $verified = $sapient->verifySignedResponse(
+            $response,
+            $this->serverSPK
+        );
+        return $this->validateResponse($verified);
+    }
+
+    /**
      * @throws \Error
      */
     protected function assertValid(): void
@@ -199,6 +319,8 @@ class Quill
     }
 
     /**
+     * Validate the Chronicle's JSON response.
+     *
      * @param Response $response
      * @return Response
      * @throws InvalidMessageException

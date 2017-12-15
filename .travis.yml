@@ -10,4 +10,5 @@ before_install:
 
 script:
 
+- vendor/bin/phpunit
 - vendor/bin/psalm
