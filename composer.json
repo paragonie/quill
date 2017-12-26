@@ -2,6 +2,7 @@
   "name": "paragonie/quill",
   "description": "Library for quickly and easily writing data to a Chronicle instance",
   "license": "ISC",
+  "type": "library",
   "authors": [
     {
       "name": "Paragon Initiative Enterprises",
@@ -9,13 +10,12 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^7",
     "guzzlehttp/guzzle": "^6",
     "paragonie/constant_time_encoding": "^2",
     "paragonie/sapient": "^1",
     "paragonie/sodium_compat": "^1.4"
   },
-
   "autoload": {
     "psr-4": {
       "ParagonIE\\Quill\\": "src/"
