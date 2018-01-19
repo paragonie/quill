@@ -9,7 +9,10 @@ use GuzzleHttp\Psr7\{
 };
 use ParagonIE\Sapient\Adapter\Guzzle;
 use ParagonIE\Sapient\CryptographyKeys\{
-    SealingPublicKey, SharedEncryptionKey, SigningPublicKey, SigningSecretKey
+    SealingPublicKey,
+    SharedEncryptionKey,
+    SigningPublicKey,
+    SigningSecretKey
 };
 use ParagonIE\Sapient\Exception\{
     HeaderMissingException,
