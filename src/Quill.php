@@ -103,7 +103,9 @@ class Quill
             $response = $this->write($data);
             // If we're here, the data was written successfully.
             return $response instanceof ResponseInterface;
-        } catch (InvalidMessageException | HeaderMissingException $ex) {
+        } catch (InvalidMessageException $ex) {
+            return false;
+        } catch (HeaderMissingException $ex) {
             return false;
         }
     }
@@ -126,7 +128,9 @@ class Quill
             $response = $this->writeEncrypted($data, $sharedEncryptionKey);
             // If we're here, the data was written successfully.
             return $response instanceof ResponseInterface;
-        } catch (InvalidMessageException | HeaderMissingException $ex) {
+        } catch (InvalidMessageException $ex) {
+            return false;
+        } catch (HeaderMissingException $ex) {
             return false;
         }
     }
@@ -149,7 +153,9 @@ class Quill
             $response = $this->writeSealed($data, $publicKey);
             // If we're here, the data was written successfully.
             return $response instanceof ResponseInterface;
-        } catch (InvalidMessageException | HeaderMissingException $ex) {
+        } catch (InvalidMessageException $ex) {
+            return false;
+        } catch (HeaderMissingException $ex) {
             return false;
         }
     }
