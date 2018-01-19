@@ -14,7 +14,7 @@
     "guzzlehttp/guzzle": "^6",
     "paragonie/constant_time_encoding": "^2",
     "paragonie/sapient": "^1",
-    "paragonie/sodium_compat": "^1.4"
+    "paragonie/sodium_compat": "^1.5"
   },
   "autoload": {
     "psr-4": {
