@@ -287,10 +287,22 @@ class Quill
         $this->assertValid();
         $sapient = new Sapient(new Guzzle($this->http));
 
+        $url = $this->chronicleUrl;
+        $pieces = \explode('/', \trim($this->chronicleUrl, '/'));
+        $last = \array_pop($pieces);
+        if ($last !== 'publish') {
+            $precursor = \array_pop($pieces);
+            if ($precursor === 'chronicle') {
+                $url = $this->chronicleUrl . '/publish';
+            } else {
+                $url = $this->chronicleUrl . '/chronicle/publish';
+            }
+        }
+
         /** @var Request $request */
         $request = $sapient->createSignedRequest(
             'POST',
-            $this->chronicleUrl,
+            $url,
             $data,
             $this->clientSSK,
             [
