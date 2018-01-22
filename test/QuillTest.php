@@ -22,7 +22,13 @@ class QuillTest extends TestCase
      */
     public function testDefaultValues()
     {
-        $quill = new Quill();
+        $quill = new Quill(
+            '',
+            '',
+            null,
+            null,
+            new \GuzzleHttp\Client()
+        );
         $this->assertSame('', $quill->getChronicleURL());
         $this->assertSame('', $quill->getClientID());
         try {
@@ -50,7 +56,13 @@ class QuillTest extends TestCase
      */
     public function testGetSet()
     {
-        $quill = new Quill();
+        $quill = new Quill(
+            '',
+            '',
+            null,
+            null,
+            new \GuzzleHttp\Client()
+        );
 
         $sign_keypair = sodium_crypto_sign_keypair();
         $signingSecretKey = new SigningSecretKey(
