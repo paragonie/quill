@@ -7,6 +7,8 @@ use GuzzleHttp\Psr7\{
     Request,
     Response
 };
+use ParagonIE\Certainty\Exception\BundleException;
+use ParagonIE\Certainty\RemoteFetch;
 use ParagonIE\Sapient\Adapter\Guzzle;
 use ParagonIE\Sapient\CryptographyKeys\{
     SealingPublicKey,
@@ -62,6 +64,10 @@ class Quill
      * @param string $clientId
      * @param SigningPublicKey|null $serverPublicKey
      * @param SigningSecretKey|null $clientSecretKey
+     * @param Client|null $http
+     *
+     * @throws BundleException
+     * @throws \TypeError
      */
     public function __construct(
         string $url = '',
@@ -85,7 +91,14 @@ class Quill
         if ($http) {
             $this->http = $http;
         } else {
-            $this->http = new Client();
+            $this->http = new Client([
+                'curl.options' => [
+                    // https://github.com/curl/curl/blob/6aa86c493bd77b70d1f5018e102bc3094290d588/include/curl/curl.h#L1927
+                    CURLOPT_SSLVERSION =>
+                        CURL_SSLVERSION_TLSv1_2 | (CURL_SSLVERSION_TLSv1 << 16)
+                ],
+                'verify' => (new RemoteFetch())->getLatestBundle()->getFilePath()
+            ]);
         }
     }
 
