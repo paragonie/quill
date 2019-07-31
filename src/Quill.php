@@ -338,7 +338,7 @@ class Quill
     /**
      * @throws \Error
      */
-    protected function assertValid(): void
+    protected function assertValid()
     {
         if (!$this->clientID) {
             throw new \Error('Client ID is not populated');
