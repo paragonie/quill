@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace ParagonIE\Quill;
 
 use GuzzleHttp\Client;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use GuzzleHttp\Psr7\{
     Request,
     Response
@@ -66,7 +67,8 @@ class Quill
      * @param SigningSecretKey|null $clientSecretKey
      * @param Client|null $http
      *
-     * @throws BundleException
+     * @throws CertaintyException
+     * @throws \SodiumException
      * @throws \TypeError
      */
     public function __construct(

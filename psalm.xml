@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<psalm
-    name="Psalm tests for Quill"
-    stopOnFirstError="false"
-    useDocblockTypes="true"
-    totallyTyped="true"
->
+<psalm name="Psalm tests for Quill" totallyTyped="true">
     <projectFiles>
         <directory name="src" />
     </projectFiles>
+    <issueHandlers>
+        <PossiblyNullPropertyAssignmentValue errorLevel="info" />
+        <RedundantConditionGivenDocblockType errorLevel="info" />
+        <DocblockTypeContradiction errorLevel="info" />
+    </issueHandlers>
 </psalm>
