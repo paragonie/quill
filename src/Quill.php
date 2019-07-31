@@ -336,6 +336,7 @@ class Quill
     }
 
     /**
+     * @return void
      * @throws \Error
      */
     protected function assertValid()
