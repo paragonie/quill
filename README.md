@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/packagist/dt/paragonie/quill.svg)](https://packagist.org/packages/paragonie/quill)
 
 Quill is a library for publishing data to a [Chronicle](https://github.com/paragonie/chronicle) instance.
-**Requires PHP 7 or newer. PHP 7.2+ is recommended.**
+**Requires PHP 7.1 or newer. PHP 7.2+ is recommended.**
 
 A [monolog handler](https://github.com/paragonie/monolog-quill) is also available. 
 
