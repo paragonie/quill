@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\{
     Request,
     Response
 };
-use ParagonIE\Certainty\Exception\BundleException;
+use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\Certainty\RemoteFetch;
 use ParagonIE\Sapient\Adapter\Guzzle;
 use ParagonIE\Sapient\CryptographyKeys\{
@@ -110,7 +110,7 @@ class Quill
      *
      * @param string $data
      * @return bool
-     * @throws \Error
+     * @throws GuzzleException
      */
     public function blindWrite(string $data): bool
     {
@@ -132,7 +132,6 @@ class Quill
      * @param string $data
      * @param SharedEncryptionKey $sharedEncryptionKey
      * @return bool
-     * @throws \Error
      */
     public function blindWriteEncrypted(
         string $data,
@@ -157,7 +156,6 @@ class Quill
      * @param string $data
      * @param SealingPublicKey $publicKey
      * @return bool
-     * @throws \Error
      */
     public function blindWriteSealed(
         string $data,
@@ -254,9 +252,9 @@ class Quill
      * @param string $data
      * @param SharedEncryptionKey $sharedEncryptionKey
      * @return ResponseInterface
+     * @throws GuzzleException
      * @throws HeaderMissingException
      * @throws InvalidMessageException
-     * @throws \Error
      */
     public function writeEncrypted(
         string $data,
@@ -274,9 +272,9 @@ class Quill
      * @param string $data
      * @param SealingPublicKey $publicKey
      * @return ResponseInterface
+     * @throws GuzzleException
      * @throws HeaderMissingException
      * @throws InvalidMessageException
-     * @throws \Error
      */
     public function writeSealed(
         string $data,
@@ -295,7 +293,7 @@ class Quill
      *
      * @throws HeaderMissingException
      * @throws InvalidMessageException
-     * @throws \Error
+     * @throws GuzzleException
      */
     public function write(string $data): ResponseInterface
     {
