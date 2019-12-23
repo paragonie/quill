@@ -7,5 +7,7 @@
         <PossiblyNullPropertyAssignmentValue errorLevel="info" />
         <RedundantConditionGivenDocblockType errorLevel="info" />
         <DocblockTypeContradiction errorLevel="info" />
+        <PossiblyNullPropertyAssignmentValue errorLevel="suppress" />
+        <InvalidThrow errorLevel="info" />
     </issueHandlers>
 </psalm>

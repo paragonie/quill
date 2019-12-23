@@ -110,7 +110,6 @@ class Quill
      *
      * @param string $data
      * @return bool
-     * @throws GuzzleException
      */
     public function blindWrite(string $data): bool
     {
@@ -252,7 +251,6 @@ class Quill
      * @param string $data
      * @param SharedEncryptionKey $sharedEncryptionKey
      * @return ResponseInterface
-     * @throws GuzzleException
      * @throws HeaderMissingException
      * @throws InvalidMessageException
      */
@@ -272,7 +270,6 @@ class Quill
      * @param string $data
      * @param SealingPublicKey $publicKey
      * @return ResponseInterface
-     * @throws GuzzleException
      * @throws HeaderMissingException
      * @throws InvalidMessageException
      */
@@ -293,10 +290,10 @@ class Quill
      *
      * @throws HeaderMissingException
      * @throws InvalidMessageException
-     * @throws GuzzleException
      */
     public function write(string $data): ResponseInterface
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $this->assertValid();
         $sapient = new Sapient(new Guzzle($this->http));
 
@@ -335,6 +332,7 @@ class Quill
 
     /**
      * @throws \Error
+     * @psalm-suppress DocblockTypeContradiction
      */
     protected function assertValid(): void
     {
@@ -363,14 +361,14 @@ class Quill
     {
         /** @var string $body */
         $body = (string) $response->getBody();
-        /** @var array $decoded */
+        /** @var array|false $decoded */
         $decoded = \json_decode($body, true);
         if (!\is_array($decoded)) {
             throw new InvalidMessageException('Could not parse JSON body');
         }
         if ($decoded['status'] !== 'OK') {
             throw new InvalidMessageException(
-                (string) $decoded['message'] ?? 'An unknown error has occurred.'
+                (string) ($decoded['message'] ?? 'An unknown error has occurred.')
             );
         }
         return $response;
