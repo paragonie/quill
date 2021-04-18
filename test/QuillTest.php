@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+namespace ParagonIE\Quill\Tests;
 
 use ParagonIE\Quill\Quill;
 use PHPUnit\Framework\TestCase;
