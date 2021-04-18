@@ -309,6 +309,7 @@ class Quill
             }
         }
 
+        $header = (string) static::CLIENT_ID_HEADER;
         /** @var Request $request */
         $request = $sapient->createSignedRequest(
             'POST',
@@ -316,7 +317,7 @@ class Quill
             $data,
             $this->clientSSK,
             [
-                static::CLIENT_ID_HEADER => $this->clientID
+                $header => $this->clientID
             ]
         );
         /** @var Response $response */

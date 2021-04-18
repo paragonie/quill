@@ -9,5 +9,6 @@
         <DocblockTypeContradiction errorLevel="info" />
         <PossiblyNullPropertyAssignmentValue errorLevel="suppress" />
         <InvalidThrow errorLevel="info" />
+        <UnnecessaryVarAnnotation errorLevel="info"/>
     </issueHandlers>
 </psalm>
