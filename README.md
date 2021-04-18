@@ -1,6 +1,6 @@
 # Quill
 
-[![Build Status](https://travis-ci.org/paragonie/quill.svg?branch=master)](https://travis-ci.org/paragonie/quill)
+[![Build Status](https://github.com/paragonie/quill/actions/workflows/ci.yml/badge.svg)](https://github.com/quill/actions)
 [![Latest Stable Version](https://poser.pugx.org/paragonie/quill/v/stable)](https://packagist.org/packages/paragonie/quill)
 [![Latest Unstable Version](https://poser.pugx.org/paragonie/quill/v/unstable)](https://packagist.org/packages/paragonie/quill)
 [![License](https://poser.pugx.org/paragonie/quill/license)](https://packagist.org/packages/paragonie/quill)

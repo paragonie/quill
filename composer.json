@@ -26,12 +26,12 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "ParagonIE\\Quill\\Tests\\": "tests/"
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^7",
-    "vimeo/psalm": "^3"
+    "phpunit/phpunit": "^7|^8|^9",
+    "vimeo/psalm": "^3|^4"
   },
   "scripts": {
     "static-analysis": "psalm",
