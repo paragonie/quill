@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<psalm name="Psalm tests for Quill" totallyTyped="true">
+<psalm name="Psalm tests for Quill">
     <projectFiles>
         <directory name="src" />
     </projectFiles>
